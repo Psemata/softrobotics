@@ -1,3 +1,6 @@
 
 # Ignoring the .DS_Store files from apple
 .DS_Store
+
+# Ignoring the .vscode folder
+.vscode
