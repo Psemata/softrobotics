@@ -7,11 +7,9 @@ private:
   unsigned long lastActionTime;           // Last time an action was performed
   unsigned long randomDelay;              // Random delay between actions
   unsigned long systemStartTime;          // System start time
-  const unsigned long MIN_DELAY = 30000;  // 3 minutes in milliseconds
-  const unsigned long MAX_DELAY = 60000;  // 4 minutes in milliseconds
+  const unsigned long MIN_DELAY = 10000;  // 3 minutes in milliseconds - 180000
+  const unsigned long MAX_DELAY = 20000;  // 4 minutes in milliseconds - 240000
   const unsigned long PAUSE = 60000;
-  // const unsigned long MIN_DELAY = 180000;        // 3 minutes in milliseconds
-  // const unsigned long MAX_DELAY = 240000;        // 4 minutes in milliseconds
   const unsigned long MAX_RUNTIME = 1209600000;  // 2 weeks in milliseconds
 
   // Servo positions (angles) within valid range
@@ -36,8 +34,8 @@ public:
     servo.attach(servoPin);
     systemStartTime = millis();
     randomDelay = random(MIN_DELAY, MAX_DELAY);
-    // currentAngle = ANGLES[0];   // Start at the initial angle
-    // servo.write(currentAngle);  // Set servo to the starting position
+    currentAngle = ANGLES[0];   // Start at the initial angle
+    servo.write(currentAngle);  // Set servo to the starting position
   }
 
   // Main function to manage states
@@ -59,20 +57,20 @@ public:
 
       case OPEN:
         chosenAngle = random(1, NUM_ANGLES);             // Choose a random angle (from ANGLES array)
-        openServo(ANGLES[chosenAngle], random(10, 50));  // Move to the chosen angle
+        openServo(ANGLES[chosenAngle], random(5, 40));  // Move to the chosen angle
         delay(PAUSE);
         currentState = CLOSE;
         break;
 
       case CLOSE:
-        closeServo(ANGLES[0], random(10, 50));  // Close to the initial angle (15°)
+        closeServo(ANGLES[0], random(5, 40));  // Close to the initial angle (15°)
         lastActionTime = currentTime;
         randomDelay = random(MIN_DELAY, MAX_DELAY);
         currentState = random(0, 2) == 0 ? IDLE : BUTTERFLY;  // Random next state
         break;
 
       case BUTTERFLY:
-        butterflyMovement(5, random(20, 40));  // 5 repetitions with random speed
+        butterflyMovement(5, random(10, 40));  // 5 repetitions with random speed
         lastActionTime = currentTime;
         randomDelay = random(MIN_DELAY, MAX_DELAY);
         currentState = IDLE;
